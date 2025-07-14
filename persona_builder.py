@@ -2,7 +2,11 @@ import re
 import requests
 from collections import Counter
 
-USER_AGENT = "UserPersonaBuilder/0.1"
+# Reddit blocks requests that do not provide a real User-Agent string.  Using a
+# generic browser UA avoids 403 errors when accessing the public JSON endpoints.
+USER_AGENT = (
+    "Mozilla/5.0 (compatible; UserPersonaBuilder/1.0; +https://example.com)"
+)
 
 STOP_WORDS = {
     'the','and','that','have','for','with','this','http','https','from','they','you','your',
