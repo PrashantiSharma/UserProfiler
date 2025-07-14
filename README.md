@@ -17,11 +17,19 @@ A Python script that analyzes a Reddit user's public activity and generates a st
 ## 🔧 Requirements
 
 - Python 3.7+
-- `praw` – Python Reddit API Wrapper
 - `requests`
-- `beautifulsoup4` *(optional if using HTML scraping)*
 
 Install dependencies:
 
 ```bash
-pip install praw requests beautifulsoup4
+pip install requests
+```
+
+## 🚀 Usage
+
+Run the `persona_builder.py` script with a Reddit profile URL:
+
+```bash
+python persona_builder.py https://www.reddit.com/user/example_user/
+
+```
