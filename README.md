@@ -34,6 +34,7 @@ python persona_builder.py https://www.reddit.com/user/example_user/
 
 ```
 
-The script includes a browser-like `User-Agent` header so it can access
-Reddit's public JSON feeds without authentication. If you encounter a `403`
-error, ensure your network allows outbound HTTPS requests.
+The script sends requests to `old.reddit.com` with a standard browser
+`User-Agent` so it can access Reddit's public JSON feeds without authentication.
+If you still see a `403` error, ensure your network allows outbound HTTPS
+requests.

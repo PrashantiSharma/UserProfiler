@@ -2,11 +2,16 @@ import re
 import requests
 from collections import Counter
 
-# Reddit blocks requests that do not provide a real User-Agent string.  Using a
-# generic browser UA avoids 403 errors when accessing the public JSON endpoints.
-USER_AGENT = (
-    "Mozilla/5.0 (compatible; UserPersonaBuilder/1.0; +https://example.com)"
-)
+# Reddit blocks requests that do not provide a realistic browser user agent.
+# Using a familiar UA and the `old.reddit.com` domain avoids 403 responses when
+# fetching public JSON data without authentication.
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:114.0) "
+        "Gecko/20100101 Firefox/114.0"
+    ),
+    "Accept": "application/json",
+}
 
 STOP_WORDS = {
     'the','and','that','have','for','with','this','http','https','from','they','you','your',
@@ -15,8 +20,7 @@ STOP_WORDS = {
 
 
 def fetch_json(url, params=None):
-    headers = {'User-Agent': USER_AGENT}
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url, headers=HEADERS, params=params)
     response.raise_for_status()
     return response.json()
 
@@ -29,7 +33,11 @@ def get_username(url):
 
 
 def get_posts(username, limit=100):
-    data = fetch_json(f"https://www.reddit.com/user/{username}/submitted.json", params={'limit': limit})
+    # Using the old.reddit domain is more permissive for anonymous requests
+    data = fetch_json(
+        f"https://old.reddit.com/user/{username}/submitted.json",
+        params={"limit": limit},
+    )
     posts = []
     for child in data.get('data', {}).get('children', []):
         d = child['data']
@@ -43,7 +51,10 @@ def get_posts(username, limit=100):
 
 
 def get_comments(username, limit=100):
-    data = fetch_json(f"https://www.reddit.com/user/{username}/comments.json", params={'limit': limit})
+    data = fetch_json(
+        f"https://old.reddit.com/user/{username}/comments.json",
+        params={"limit": limit},
+    )
     comments = []
     for child in data.get('data', {}).get('children', []):
         d = child['data']
